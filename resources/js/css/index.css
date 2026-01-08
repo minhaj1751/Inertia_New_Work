@@ -129,10 +129,10 @@
     --color-error-hover: ;
     --color-error-content: var(--color-error-content);
 
-    --color-dark: #2A2E42
+    --color-dark: #2A2E42 var(--color-dark);
     --color-dark-light: #DEDEE2;
     --color-dark-hover: #DEDEE2;
-    --color-dark-content: #FFFFFF
+    --color-dark-content: #FFFFFF var(--color-dark-content);
 
 }
 
