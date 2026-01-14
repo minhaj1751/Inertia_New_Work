@@ -1,389 +1,166 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
+import Dropdown from '@/Components/Dropdown';
 import wblogo from "../images/logo/wbsoft.png";
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
-
-
 import { useEffect, useRef, useState } from "react";
-import { BsMoonStarsFill } from "react-icons/bs";
-import { FaFileInvoiceDollar, FaRegUserCircle } from "react-icons/fa";
-import { FaQuestion } from "react-icons/fa6";
-import { GoSun } from "react-icons/go";
-import { IoIosArrowDown, IoIosArrowUp, IoIosLogOut, IoMdNotificationsOutline } from "react-icons/io";
+import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoClose, IoMailOpenOutline } from "react-icons/io5";
-import { MdOutlineSettings } from "react-icons/md";
-import { TbCurrencyDollar } from "react-icons/tb";
-// import { useLocation } from "react-router";
+import { FaRegUserCircle } from "react-icons/fa";
+import { IoIosArrowDown } from "react-icons/io";
 // import { toast } from "react-toastify";
-// import Logo from "../../assets/logo/wbLogo.png";
-
-const FALLBACK_AVATAR =
-    "https://img.freepik.com/premium-vector/boy-face-design-illustrat_1063011-590.jpg?semt=ais_hybrid&w=740&q=80";
-
-const startsWithSegment = (pathname, prefix) =>
-    pathname === prefix || pathname.startsWith(prefix + "/");
-
+// import "react-toastify/dist/ReactToastify.css";
 
 export default function AuthenticatedLayout({ header, children }) {
-    const user = usePage().props.auth.user;
+    const { auth } = usePage().props;
+    const user = auth.user;
 
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
+    /* -------------------- Theme -------------------- */
+    const [theme, setTheme] = useState("light");
 
-
-    // const location = useLocation();
-
-    const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
-
-    const dropdownRef = useRef(null);
-    const profileImageRef = useRef(null);
-    const [isDropdownVisible, setDropdownVisible] = useState(false);
-
-    const notificationDropdownRef = useRef(null);
-    const notificationIconRef = useRef(null);
-    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-    const sidebarRef = useRef(null);
-    const [activeMenu, setActiveMenu] = useState(null);
-
-
-
-    //  segment-safe parent active check
-    // const isParentActive = (prefixes) =>
-    //     prefixes.some((p) => startsWithSegment(location.pathname, p));
-
-    const toggleDropdown = () => setDropdownVisible((p) => !p);
-    const toggleNotificationDropdown = () => setIsNotificationOpen((p) => !p);
-    const toggleSidebar = () => setIsSidebarOpen((p) => !p);
-
-    const handleMenuClick = () => {
-        setDropdownVisible(false);
-        setIsSidebarOpen(false);
-    };
-
-    const toggleMobileMenu = (menuName) => {
-        setActiveMenu((prev) => (prev === menuName ? null : menuName));
-    };
-
-    // Load theme from localStorage on first render
     useEffect(() => {
         const savedTheme = localStorage.getItem("theme") || "light";
+        document.documentElement.className = savedTheme;
         setTheme(savedTheme);
-        document.documentElement.classList.remove("light", "dark");
-        document.documentElement.classList.add(savedTheme);
     }, []);
 
-    // Apply theme when theme state changes
     useEffect(() => {
-        document.documentElement.classList.remove("light", "dark");
-        document.documentElement.classList.add(theme);
+        document.documentElement.className = theme;
         localStorage.setItem("theme", theme);
     }, [theme]);
-
-
 
     const handleThemeToggle = () => {
         const newTheme = theme === "light" ? "dark" : "light";
         setTheme(newTheme);
         toast.success(
-            newTheme === "dark" ? "Dark Mode Enabled" : "Light Mode Enabled",
-            {
-                position: "top-right",
-                autoClose: 2000,
-                theme: newTheme,
-            }
+            newTheme === "dark" ? "Dark Mode Enabled" : "Light Mode Enabled"
         );
     };
 
-    const [profile, setProfile] = useState(null);
-    const [profileLoading, setProfileLoading] = useState(false);
-    const [userData, setUserData] = useState(null);
-
-
-
-    useEffect(() => {
-        let mounted = true;
-
-        const fetchProfile = async () => {
-            setProfileLoading(true);
-
-        };
-
-        fetchProfile();
-
-        return () => {
-            mounted = false;
-        };
-
-
-    }, []);
-
-
-
-    // useEffect(() => {
-    //     const handlePointerDown = (event) => {
-    //         // Profile dropdown close
-    //         // if (
-    //         //     dropdownRef.current &&
-    //         //     !dropdownRef.current.contains(event.target) &&
-    //         //     profileImageRef.current &&
-    //         //     !profileImageRef.current.contains(event.target)
-    //         // ) {
-    //         //     setDropdownVisible(false);
-    //         // }
-
-    //         // Notification dropdown close
-    //         // if (
-    //         //     notificationDropdownRef.current &&
-    //         //     !notificationDropdownRef.current.contains(event.target) &&
-    //         //     notificationIconRef.current &&
-    //         //     !notificationIconRef.current.contains(event.target)
-    //         // ) {
-    //         //     setIsNotificationOpen(false);
-    //         // }
-
-    //     };
-
-    //     document.addEventListener("pointerdown", handlePointerDown);
-    //     return () => document.removeEventListener("pointerdown", handlePointerDown);
-    // }, [isSidebarOpen]);
-
-    // const handleLogout = async () => {
-    //     try {
-    //         const res = await axiosSecure.get("/api/logout");
-    //         if (res?.data?.success === true) {
-    //             localStorage.removeItem("token");
-    //             localStorage.removeItem("userData");
-    //             window.location.href = "/login";
-    //         }
-    //     } catch (error) {
-    //         const message =
-    //             error?.response?.data?.message || error?.message || "Logout failed. Please try again.";
-    //         toast.error(message);
-    //     }
-    // };
-
-    const navLinkClass = ({ isActive }) =>
-        `block min-w-40 p-2 rounded-md transition-colors text-nowrap ${isActive
-            ? "bg-primary text-secondary-content font-semibold"
-            : "hover:bg-primary-light hover:text-black"
-        }`;
-
-
+    /* -------------------- Notifications -------------------- */
+    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+    const toggleNotificationDropdown = () =>
+        setIsNotificationOpen((prev) => !prev);
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <div className="navbar-start -my-4">
-                    <NavLink href={route("dashboard")}>
-                        <img src={wblogo} alt="" />
-                    </NavLink>
-                </div>
-            <ul className="navbar-center hidden lg:flex space-x-2">
-                {/* Dashboard */}
-                <li className="relative font-medium text-base text-primary-content">
+            {/* -------------------- Navbar -------------------- */}
+            <div className="flex items-center justify-between px-6 py-4 bg-white shadow">
+                {/* Logo */}
+                <NavLink href={route("dashboard")}>
+                    <img src={wblogo} alt="Logo" className="w-56" />
+                </NavLink>
+
+                {/* Menu */}
+                <ul className="hidden lg:flex gap-6 font-medium">
                     <NavLink
                         href={route("dashboard")}
                         active={route().current("dashboard")}
                     >
                         Dashboard
                     </NavLink>
-                </li>
 
-                {/* Welcome */}
-                <li className="relative font-medium text-base text-primary-content">
                     <NavLink
                         href={route("products.index")}
-                        active={route().current("products")}
+                        active={route().current("products.*")}
                     >
                         Products
                     </NavLink>
-                </li>
 
-
-                {/* course */}
-                <li className="relative font-medium text-base text-primary-content">
                     <NavLink
                         href={route("category.index")}
-                        active={route().current("category")}
+                        active={route().current("category.*")}
                     >
                         Category
                     </NavLink>
-                </li>
+                </ul>
 
-            </ul>
+                {/* Right Section */}
+                <div className="flex items-center gap-4">
+                    {/* Notifications */}
+                    <div className="relative">
+                        <button
+                            onClick={toggleNotificationDropdown}
+                            className="relative p-2 rounded-full hover:bg-gray-200"
+                        >
+                            <IoMdNotificationsOutline size={28} />
+                            <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-xs flex items-center justify-center text-white">
+                                5
+                            </span>
+                        </button>
 
+                        {isNotificationOpen && (
+                            <div className="absolute right-0 mt-3 w-72 bg-white shadow-lg rounded-md z-50">
+                                <div className="flex justify-between items-center p-4 border-b">
+                                    <h3 className="font-semibold">Notifications</h3>
+                                    <IoMailOpenOutline size={20} />
+                                </div>
 
-            {/* <nav className="border-b border-gray-100 bg-white">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
-                        <div className="flex">
-                            <div className="flex shrink-0 items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                                </Link>
-                            </div>
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route("dashboard")}
-                                    active={route().current("dashboard")}
-                                >
-                                    Dashboard
-                                </NavLink>
-                                <NavLink
-                                    href={route("products.index")}
-                                    active={route().current("products")}
-                                >
-                                    Products
-                                </NavLink>
-                                <NavLink
-                                    href={route("category.index")}
-                                    active={route().current("category")}
-                                >
-                                    Category
-                                </NavLink>
-                            </div>
-                        </div>
-
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="relative ms-3">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                                            >
-                                                {user.name}
-
-                                                <svg
-                                                    className="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route("profile.edit")}
+                                <ul className="max-h-60 overflow-y-auto">
+                                    {[1, 2, 3].map((i) => (
+                                        <li
+                                            key={i}
+                                            className="flex justify-between p-3 border-b hover:bg-gray-100"
                                         >
-                                            Profile
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route("logout")}
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div>
+                                            <div>
+                                                <p className="text-sm font-medium">
+                                                    New message received
+                                                </p>
+                                                <p className="text-xs text-gray-500">
+                                                    4 days ago
+                                                </p>
+                                            </div>
+                                            <IoClose className="cursor-pointer" />
+                                        </li>
+                                    ))}
+                                </ul>
 
-                        <div className="-me-2 flex items-center sm:hidden">
-                            <button
-                                onClick={() =>
-                                    setShowingNavigationDropdown(
-                                        (previousState) => !previousState
-                                    )
-                                }
-                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
-                            >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? "inline-flex"
-                                                : "hidden"
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? "inline-flex"
-                                                : "hidden"
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
+                                <div className="p-3 text-center text-sm text-blue-600 cursor-pointer">
+                                    View all
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Profile Dropdown */}
+                    <Dropdown>
+                        <Dropdown.Trigger>
+                            <button className="flex items-center gap-2">
+                                <FaRegUserCircle size={26} />
+                                <span className="text-sm font-medium">
+                                    {user.name}
+                                </span>
+                                <IoIosArrowDown />
                             </button>
-                        </div>
-                    </div>
-                </div>
+                        </Dropdown.Trigger>
 
-                <div
-                    className={
-                        (showingNavigationDropdown ? "block" : "hidden") +
-                        " sm:hidden"
-                    }
-                >
-                    <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route("dashboard")}
-                            active={route().current("dashboard")}
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route("products.index")}
-                            active={route().current("products")}
-                        >
-                            Products
-                        </ResponsiveNavLink>
-                    </div>
-
-                    <div className="border-t border-gray-200 pb-1 pt-4">
-                        <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route("profile.edit")}>
+                        <Dropdown.Content>
+                            <Dropdown.Link href={route("profile.edit")}>
                                 Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                method="post"
+                            </Dropdown.Link>
+
+                            <Dropdown.Link
                                 href={route("logout")}
+                                method="post"
                                 as="button"
                             >
                                 Log Out
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
+                            </Dropdown.Link>
+                        </Dropdown.Content>
+                    </Dropdown>
                 </div>
-            </nav> */}
+            </div>
 
+            {/* Optional Header */}
             {header && (
                 <header className="bg-white shadow">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                    <div className="max-w-7xl mx-auto px-6 py-4">
                         {header}
                     </div>
                 </header>
             )}
 
-            <main>{children}</main>
+            {/* Page Content */}
+            <main className="p-6">{children}</main>
         </div>
     );
 }
