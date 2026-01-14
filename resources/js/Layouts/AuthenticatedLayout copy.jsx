@@ -1,30 +1,9 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
-import wblogo from "../images/logo/wbsoft.png";
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
-
-
-import { useEffect, useRef, useState } from "react";
-import { BsMoonStarsFill } from "react-icons/bs";
-import { FaFileInvoiceDollar, FaRegUserCircle } from "react-icons/fa";
-import { FaQuestion } from "react-icons/fa6";
-import { GoSun } from "react-icons/go";
-import { IoIosArrowDown, IoIosArrowUp, IoIosLogOut, IoMdNotificationsOutline } from "react-icons/io";
-import { IoClose, IoMailOpenOutline } from "react-icons/io5";
-import { MdOutlineSettings } from "react-icons/md";
-import { TbCurrencyDollar } from "react-icons/tb";
-// import { useLocation } from "react-router";
-// import { toast } from "react-toastify";
-// import Logo from "../../assets/logo/wbLogo.png";
-
-const FALLBACK_AVATAR =
-    "https://img.freepik.com/premium-vector/boy-face-design-illustrat_1063011-590.jpg?semt=ais_hybrid&w=740&q=80";
-
-const startsWithSegment = (pathname, prefix) =>
-    pathname === prefix || pathname.startsWith(prefix + "/");
-
+import { useState } from 'react';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
@@ -32,192 +11,9 @@ export default function AuthenticatedLayout({ header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
-
-    // const location = useLocation();
-
-    const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
-
-    const dropdownRef = useRef(null);
-    const profileImageRef = useRef(null);
-    const [isDropdownVisible, setDropdownVisible] = useState(false);
-
-    const notificationDropdownRef = useRef(null);
-    const notificationIconRef = useRef(null);
-    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-    const sidebarRef = useRef(null);
-    const [activeMenu, setActiveMenu] = useState(null);
-
-
-
-    //  segment-safe parent active check
-    // const isParentActive = (prefixes) =>
-    //     prefixes.some((p) => startsWithSegment(location.pathname, p));
-
-    const toggleDropdown = () => setDropdownVisible((p) => !p);
-    const toggleNotificationDropdown = () => setIsNotificationOpen((p) => !p);
-    const toggleSidebar = () => setIsSidebarOpen((p) => !p);
-
-    const handleMenuClick = () => {
-        setDropdownVisible(false);
-        setIsSidebarOpen(false);
-    };
-
-    const toggleMobileMenu = (menuName) => {
-        setActiveMenu((prev) => (prev === menuName ? null : menuName));
-    };
-
-    // Load theme from localStorage on first render
-    useEffect(() => {
-        const savedTheme = localStorage.getItem("theme") || "light";
-        setTheme(savedTheme);
-        document.documentElement.classList.remove("light", "dark");
-        document.documentElement.classList.add(savedTheme);
-    }, []);
-
-    // Apply theme when theme state changes
-    useEffect(() => {
-        document.documentElement.classList.remove("light", "dark");
-        document.documentElement.classList.add(theme);
-        localStorage.setItem("theme", theme);
-    }, [theme]);
-
-
-
-    const handleThemeToggle = () => {
-        const newTheme = theme === "light" ? "dark" : "light";
-        setTheme(newTheme);
-        toast.success(
-            newTheme === "dark" ? "Dark Mode Enabled" : "Light Mode Enabled",
-            {
-                position: "top-right",
-                autoClose: 2000,
-                theme: newTheme,
-            }
-        );
-    };
-
-    const [profile, setProfile] = useState(null);
-    const [profileLoading, setProfileLoading] = useState(false);
-    const [userData, setUserData] = useState(null);
-
-
-
-    useEffect(() => {
-        let mounted = true;
-
-        const fetchProfile = async () => {
-            setProfileLoading(true);
-
-        };
-
-        fetchProfile();
-
-        return () => {
-            mounted = false;
-        };
-
-
-    }, []);
-
-
-
-    // useEffect(() => {
-    //     const handlePointerDown = (event) => {
-    //         // Profile dropdown close
-    //         // if (
-    //         //     dropdownRef.current &&
-    //         //     !dropdownRef.current.contains(event.target) &&
-    //         //     profileImageRef.current &&
-    //         //     !profileImageRef.current.contains(event.target)
-    //         // ) {
-    //         //     setDropdownVisible(false);
-    //         // }
-
-    //         // Notification dropdown close
-    //         // if (
-    //         //     notificationDropdownRef.current &&
-    //         //     !notificationDropdownRef.current.contains(event.target) &&
-    //         //     notificationIconRef.current &&
-    //         //     !notificationIconRef.current.contains(event.target)
-    //         // ) {
-    //         //     setIsNotificationOpen(false);
-    //         // }
-
-    //     };
-
-    //     document.addEventListener("pointerdown", handlePointerDown);
-    //     return () => document.removeEventListener("pointerdown", handlePointerDown);
-    // }, [isSidebarOpen]);
-
-    // const handleLogout = async () => {
-    //     try {
-    //         const res = await axiosSecure.get("/api/logout");
-    //         if (res?.data?.success === true) {
-    //             localStorage.removeItem("token");
-    //             localStorage.removeItem("userData");
-    //             window.location.href = "/login";
-    //         }
-    //     } catch (error) {
-    //         const message =
-    //             error?.response?.data?.message || error?.message || "Logout failed. Please try again.";
-    //         toast.error(message);
-    //     }
-    // };
-
-    const navLinkClass = ({ isActive }) =>
-        `block min-w-40 p-2 rounded-md transition-colors text-nowrap ${isActive
-            ? "bg-primary text-secondary-content font-semibold"
-            : "hover:bg-primary-light hover:text-black"
-        }`;
-
-
-
     return (
         <div className="min-h-screen bg-gray-100">
-            <div className="navbar-start -my-4">
-                    <NavLink href={route("dashboard")}>
-                        <img src={wblogo} alt="" />
-                    </NavLink>
-                </div>
-            <ul className="navbar-center hidden lg:flex space-x-2">
-                {/* Dashboard */}
-                <li className="relative font-medium text-base text-primary-content">
-                    <NavLink
-                        href={route("dashboard")}
-                        active={route().current("dashboard")}
-                    >
-                        Dashboard
-                    </NavLink>
-                </li>
-
-                {/* Welcome */}
-                <li className="relative font-medium text-base text-primary-content">
-                    <NavLink
-                        href={route("products.index")}
-                        active={route().current("products")}
-                    >
-                        Products
-                    </NavLink>
-                </li>
-
-
-                {/* course */}
-                <li className="relative font-medium text-base text-primary-content">
-                    <NavLink
-                        href={route("category.index")}
-                        active={route().current("category")}
-                    >
-                        Category
-                    </NavLink>
-                </li>
-
-            </ul>
-
-
-            {/* <nav className="border-b border-gray-100 bg-white">
+            <nav className="border-b border-gray-100 bg-white">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
@@ -373,7 +169,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
                     </div>
                 </div>
-            </nav> */}
+            </nav>
 
             {header && (
                 <header className="bg-white shadow">
