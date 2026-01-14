@@ -1,6 +1,6 @@
 import '../css/app.css';
-import './minhaj.css';
 import './bootstrap';
+import './minhaj.css';
 
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';

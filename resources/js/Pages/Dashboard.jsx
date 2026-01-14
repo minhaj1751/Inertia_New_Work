@@ -12,10 +12,6 @@ export default function Dashboard() {
         <AuthenticatedLayout>
             <Head title="Dashboard" />
 
-            <h2 className="text-2xl ml-6 font-semibold leading-tight text-gray-800">
-                Dashboard
-            </h2>
-
             <div className="p-6 space-y-8 bg-slate-50 min-h-screen">
 
                 {/* ===== Welcome Section ===== */}

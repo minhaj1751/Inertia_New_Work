@@ -55,6 +55,13 @@ export default function AuthenticatedLayout({ header, children }) {
                     <NavLink
                         href={route("dashboard")}
                         active={route().current("dashboard")}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-md cursor-pointer
+            transition-colors duration-300
+            text-lg
+            ${route().current("dashboard")
+                                ? "bg-primary text-white font-semibold"
+                                : "hover:bg-primary-light hover:text-black"
+                            }`}
                     >
                         Dashboard
                     </NavLink>
@@ -62,6 +69,13 @@ export default function AuthenticatedLayout({ header, children }) {
                     <NavLink
                         href={route("products.index")}
                         active={route().current("products.*")}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-md cursor-pointer
+            transition-colors duration-300
+            text-lg
+            ${route().current("products.*")
+                                ? "bg-primary text-white font-semibold"
+                                : "hover:bg-primary-light hover:text-black"
+                            }`}
                     >
                         Products
                     </NavLink>
@@ -69,10 +83,18 @@ export default function AuthenticatedLayout({ header, children }) {
                     <NavLink
                         href={route("category.index")}
                         active={route().current("category.*")}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-md cursor-pointer
+            transition-colors duration-300
+            text-lg
+            ${route().current("category.*")
+                                ? "bg-primary text-white font-semibold"
+                                : "hover:bg-primary-light hover:text-black"
+                            }`}
                     >
                         Category
                     </NavLink>
                 </ul>
+
 
                 {/* Right Section */}
                 <div className="flex items-center gap-4">
@@ -151,13 +173,13 @@ export default function AuthenticatedLayout({ header, children }) {
             </div>
 
             {/* Optional Header */}
-            {header && (
+            {/* {header && (
                 <header className="bg-white shadow">
                     <div className="max-w-7xl mx-auto px-6 py-4">
                         {header}
                     </div>
                 </header>
-            )}
+            )} */}
 
             {/* Page Content */}
             <main className="p-6">{children}</main>
