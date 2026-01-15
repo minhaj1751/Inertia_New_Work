@@ -55,10 +55,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     <NavLink
                         href={route("dashboard")}
                         active={route().current("dashboard")}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-md cursor-pointer
-            transition-colors duration-300
-            text-lg
-            ${route().current("dashboard")
+                        className={`flex items-center gap-2 px-4 py-2 rounded-md cursor-pointer transition-colors duration-300 text-lg ${route().current("dashboard")
                                 ? "bg-primary text-white font-semibold"
                                 : "hover:bg-primary-light hover:text-black"
                             }`}
@@ -69,10 +66,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     <NavLink
                         href={route("products.index")}
                         active={route().current("products.*")}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-md cursor-pointer
-            transition-colors duration-300
-            text-lg
-            ${route().current("products.*")
+                        className={`flex items-center gap-2 px-4 py-2 rounded-md cursor-pointer transition-colors duration-300 text-lg ${route().current("products.*")
                                 ? "bg-primary text-white font-semibold"
                                 : "hover:bg-primary-light hover:text-black"
                             }`}
@@ -83,10 +77,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     <NavLink
                         href={route("category.index")}
                         active={route().current("category.*")}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-md cursor-pointer
-            transition-colors duration-300
-            text-lg
-            ${route().current("category.*")
+                        className={`flex items-center gap-2 px-4 py-2 rounded-md cursor-pointer transition-colors duration-300 text-lg ${route().current("category.*")
                                 ? "bg-primary text-white font-semibold"
                                 : "hover:bg-primary-light hover:text-black"
                             }`}
