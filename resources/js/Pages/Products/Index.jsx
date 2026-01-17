@@ -16,7 +16,7 @@ export default function Index({ auth, products }) {
 
     const [openAdd, setOpenAdd] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
-    const [editingCategory, setEditingCategory] = useState(null);
+    const [editingProduct, setEditingProduct] = useState(null);
 
     /* ================= FORMS ================= */
     const { data, setData, post, processing, errors } = useForm({
